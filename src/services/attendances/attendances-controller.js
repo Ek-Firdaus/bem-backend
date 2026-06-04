@@ -11,7 +11,7 @@ const eventRepositories = new EventsRepositories();
 export const createAttendaces = async (req, res, next) => {
   try {
     const user_id = req.user.id;
-    const { event_id } = req.validated;
+    const { event_id, token } = req.validated;
     const id = `attd-${nanoid(16)}`;
     const clock_in = new Date();
     const event = await eventRepositories.getEventById(event_id);
@@ -21,6 +21,14 @@ export const createAttendaces = async (req, res, next) => {
     }
     if (clock_in > event.end_time) {
       throw new InvariantError('Presensi sudah ditutup');
+    }
+    if (token !== event.token) {
+      throw new InvariantError('Token yang dimasukkan salah!');
+    }
+
+    const existAttendances = await attendancesRepositories.getAttendancesByUserIdAndEventId(event_id, user_id);
+    if (existAttendances) {
+      throw new InvariantError('Kamu sudah melakukan Presensi');
     }
 
     const attendances = await attendancesRepositories.createAttendance(id, user_id, event_id, clock_in);
@@ -48,7 +56,7 @@ export const getAttendancesByUserId = async (req, res, next) => {
     const user_id = req.user.id;
     const attendances = await attendancesRepositories.getAttendancesByUserId(user_id);
 
-    return response(res, 200, 'Prensensi Berhasil ditampilkan', { attendances });
+    return response(res, 200, 'Presensi Berhasil ditampilkan', { attendances });
   } catch (err) {
     next(err);
   };

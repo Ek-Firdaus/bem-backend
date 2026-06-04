@@ -52,6 +52,16 @@ class AttendancesRepositories {
     const result = await this.pool.query(query);
     return result.rows;
   }
+
+  async getAttendancesByUserIdAndEventId(event_id, user_id) {
+    const query = {
+      text: 'SELECT * FROM attendances WHERE user_id = $1 AND event_id = $2',
+      values: [user_id, event_id]
+    };
+
+    const result = await this.pool.query(query);
+    return result.rows[0];
+  }
 }
 
 export default AttendancesRepositories;

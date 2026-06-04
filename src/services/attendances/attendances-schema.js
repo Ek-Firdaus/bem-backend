@@ -6,4 +6,8 @@ export const createAttendanceSchema = Joi.object({
     'string.empty': 'ID acara harus diisi',
     'any.required': 'ID acara harus diisi',
   }),
+  token: Joi.string().required().messages({
+    'string.empty': 'Token harus diisi',
+    'any.required': 'Token harus diisi',
+  }),
 });
