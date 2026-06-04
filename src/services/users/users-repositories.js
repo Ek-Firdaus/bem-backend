@@ -25,6 +25,26 @@ class UsersRepositories {
     return result.rows[0];
   }
 
+  async getUserById(id) {
+    const query = {
+      text: 'SELECT * FROM users WHERE id = $1',
+      values: [id]
+    };
+
+    const result = await this.pool.query(query);
+    return result.rows[0];
+  }
+
+  async updateUser(id, hashedPassword) {
+    const query = {
+      text: 'UPDATE users SET password = $1 WHERE id = $2',
+      values: [hashedPassword, id]
+    };
+
+    const result = await this.pool.query(query);
+    return result.rows[0];
+  }
+
 };
 
 export default UsersRepositories;
