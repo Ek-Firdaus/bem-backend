@@ -121,43 +121,68 @@ export const exportAttendances = async (req, res, next) => {
   try {
     const attendances = await attendancesRepositories.getAllAttendances();
 
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet(
-      'Rekap Presensi'
-    );
+    // 1. Susun struktur pivot
+    const userMap = {};   // { user_name: { npm, Acara1: 1, Acara2: 0, ... } }
+    const eventSet = new Set();
 
+    attendances.forEach(({ user_name, npm, event_name, status }) => {
+      eventSet.add(event_name);
+      if (!userMap[user_name]) userMap[user_name] = { npm };
+      userMap[user_name][event_name] = status === 'present' ? 1 : 0;
+    });
+
+    const events = [...eventSet];
+
+    // 2. Buat worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Rekap Presensi');
+
+    // 3. Header dinamis
     worksheet.columns = [
-      { header: 'Nama', key: 'user_name', width: 30 },
+      { header: 'Nama', key: 'nama', width: 25 },
       { header: 'NPM', key: 'npm', width: 15 },
-      { header: 'Event', key: 'event_name', width: 30 },
-      { header: 'Status', key: 'status', width: 15 },
-      { header: 'Waktu Hadir', key: 'clock_in', width: 25 },
+      ...events.map((e) => ({ header: e, key: e, width: 15 })),
+      { header: 'Total', key: 'total', width: 10 },
     ];
 
-    attendances.forEach((attendance) => {
-      worksheet.addRow({
-        ...attendance,
-        clock_in: attendance.clock_in
-          ? new Date(attendance.clock_in).toLocaleString('id-ID')
-          : '-',
+    // 4. Isi baris per user
+    Object.entries(userMap).forEach(([name, data]) => {
+      const row = { nama: name, npm: data.npm };
+      let total = 0;
+      events.forEach((e) => {
+        row[e] = data[e] ?? 0;
+        total += row[e];
+      });
+      row.total = total;
+      const addedRow = worksheet.addRow(row);
+
+      // Warnai kolom event
+      events.forEach((e, i) => {
+        const cell = addedRow.getCell(i + 3); // kolom 1=Nama, 2=NPM, 3+=event
+        const isPresent = data[e] === 1;
+
+        cell.value = isPresent ? 'Hadir' : 'Tidak Hadir';
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: isPresent ? 'D6F5E3' : 'FDE8E8' },
+        };
+        cell.font = {
+          bold: true,
+          color: { argb: isPresent ? '1A7A4A' : 'C0392B' },
+        };
+        cell.alignment = { horizontal: 'center' };
       });
     });
 
     worksheet.getRow(1).font = { bold: true };
 
-    res.setHeader(
-      'Content-Type',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    );
-
-    res.setHeader(
-      'Content-Disposition',
-      'attachment; filename=rekap-presensi.xlsx'
-    );
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=rekap-presensi.xlsx');
 
     await workbook.xlsx.write(res);
     res.end();
   } catch (err) {
     next(err);
-  };
+  }
 };
