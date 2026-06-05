@@ -31,7 +31,7 @@ export const createUser = async (req, res, next) => {
   };
 };
 
-export const updateUser = async (req, res, next) => {
+export const updatePasswordUser = async (req, res, next) => {
   try {
     const id = req.user.id;
     const { old_password, new_password } = req.validated;
@@ -53,7 +53,7 @@ export const updateUser = async (req, res, next) => {
     }
 
     const hashedPassword = await bcrypt.hash(new_password, 10);
-    await userRepositories.updateUser(id, hashedPassword);
+    await userRepositories.updatePasswordUser(id, hashedPassword);
 
     return response(res, 200, 'Password berhasil diperbarui');
 
@@ -72,6 +72,40 @@ export const getUserById = async (req, res, next) => {
     }
 
     return response(res, 200, 'Profil Berhasil ditampilkan', user);
+  } catch (err) {
+    next(err);
+  };
+};
+
+export const getAllUser = async (req, res, next) => {
+  try {
+    const user = await userRepositories.getAllUser();
+
+    return response(res, 200, 'Semua pengguna berhasil ditampilkan', { user });
+  } catch (err) {
+    next(err);
+  };
+};
+
+export const updateUser = async (req, res, next) => {
+  try {
+    const id = req.params;
+    const existUser = await userRepositories.getUserById(id);
+
+    if (!existUser) {
+      throw new NotFoundError('Pengguna tidak ditemukan');
+    }
+
+    const updatedData = {
+      name: req.validated.name ?? existUser.name,
+      npm: req.validated.npm ?? existUser.npm,
+      division: req.validated ?? existUser.password,
+      role: req.validated ?? existUser.role
+    };
+
+    const user = await userRepositories.updateUser(id, updatedData);
+
+    return response(res, 200, 'Pengguna berhasil diubah', user);
   } catch (err) {
     next(err);
   };

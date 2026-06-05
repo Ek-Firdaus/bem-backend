@@ -20,7 +20,7 @@ export const createUserSchema = Joi.object({
   }),
 });
 
-export const updateUserSchema = Joi.object({
+export const updatePasswordUserSchema = Joi.object({
   old_password: Joi.string().required().messages({
     'any.required': 'Password lama wajib diisi',
   }),
@@ -29,4 +29,37 @@ export const updateUserSchema = Joi.object({
     'any.required': 'Password baru wajib diisi',
     'string.min': 'Password minimal 8 karakter',
   }),
+});
+
+export const updateUserSchema = Joi.object({
+  name: Joi.string().messages({
+    'string.base': 'Nama harus berupa teks',
+  }),
+
+  npm: Joi.string().messages({
+    'string.base': 'NPM harus berupa teks',
+  }),
+
+  division: Joi.string().messages({
+    'string.base': 'Divisi harus berupa teks',
+  }),
+
+  role: Joi.string()
+    .valid(
+      'super_admin',
+      'pilar',
+      'admin_sekre',
+      'admin_psdm',
+      'member'
+    )
+    .messages({
+      'any.only':
+        'Role harus bernilai salah satu dari super_admin, pilar, admin_sekre, admin_psdm, member',
+    }),
+
+  password: Joi.string().min(8).messages({
+    'string.min': 'Password minimal 8 karakter',
+  }),
+}).min(1).messages({
+  'object.min': 'Minimal satu field harus diisi',
 });

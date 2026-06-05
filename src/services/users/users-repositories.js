@@ -35,10 +35,29 @@ class UsersRepositories {
     return result.rows[0];
   }
 
-  async updateUser(id, hashedPassword) {
+  async updatePasswordUser(id, hashedPassword) {
     const query = {
       text: 'UPDATE users SET password = $1 WHERE id = $2',
       values: [hashedPassword, id]
+    };
+
+    const result = await this.pool.query(query);
+    return result.rows[0];
+  }
+
+  async getAllUser() {
+    const query = {
+      text: 'SELECT name, npm, division, role FROM users',
+    };
+
+    const result = await this.pool.query(query);
+    return result.rows;
+  }
+
+  async updateUser(id, { name, npm, division, role }) {
+    const query = {
+      text: 'UPDATE users SET name = $1, npm = $2, division = $3, role = $4 WHERE id = $5 RETURNING name, npm, division, role',
+      values: [name, npm, division, role, id]
     };
 
     const result = await this.pool.query(query);
