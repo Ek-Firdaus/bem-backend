@@ -27,6 +27,7 @@ export const login = async (req, res, next) => {
       id: user.id,
       name: user.name,
       npm: user.npm,
+      division: user.division,
       role: user.role,
     };
 
@@ -35,7 +36,7 @@ export const login = async (req, res, next) => {
 
     await authRepositories.addRefreshToken(refreshToken);
 
-    return response(res, 200, 'Login berhasil', { accessToken, refreshToken, user: { id: user.id, name: user.name, npm: user.npm, role: user.role } });
+    return response(res, 200, 'Login berhasil', { accessToken, refreshToken, user: { id: user.id, name: user.name, npm: user.npm, division: user.division, role: user.role } });
   } catch (error) {
     next(error);
   }
