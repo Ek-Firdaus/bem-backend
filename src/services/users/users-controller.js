@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import response from '../../utils/response.js';
 import UserRepositories from './users-repositories.js';
 import InvariantError from '../../exceptions/invariant-error.js';
-import AuthenticationError from '../../exceptions/authentication-error.js';
 import NotFoundError from '../../exceptions/not-found-error.js';
 
 const userRepositories = new UserRepositories();
@@ -41,7 +40,7 @@ export const updatePasswordUser = async (req, res, next) => {
     const validPassword = await bcrypt.compare(old_password, user.password);
 
     if (!validPassword) {
-      throw new AuthenticationError('Password lama tidak sesuai');
+      throw new InvariantError('Password lama tidak sesuai');
     }
 
     const isSamePassword = await bcrypt.compare(new_password, user.password);
@@ -89,7 +88,7 @@ export const getAllUser = async (req, res, next) => {
 
 export const updateUser = async (req, res, next) => {
   try {
-    const id = req.params;
+    const { id } = req.params;
     const existUser = await userRepositories.getUserById(id);
 
     if (!existUser) {
@@ -99,8 +98,8 @@ export const updateUser = async (req, res, next) => {
     const updatedData = {
       name: req.validated.name ?? existUser.name,
       npm: req.validated.npm ?? existUser.npm,
-      division: req.validated ?? existUser.password,
-      role: req.validated ?? existUser.role
+      division: req.validated.division ?? existUser.division,
+      role: req.validated.role ?? existUser.role
     };
 
     const user = await userRepositories.updateUser(id, updatedData);

@@ -47,7 +47,7 @@ class UsersRepositories {
 
   async getAllUser() {
     const query = {
-      text: 'SELECT name, npm, division, role FROM users',
+      text: 'SELECT id, name, npm, division, role FROM users',
     };
 
     const result = await this.pool.query(query);
