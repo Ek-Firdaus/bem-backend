@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
-import { Pool } from 'pg';
+import pool from '../../database/pool.js';
 
 class InventoriesRepositories {
   constructor() {
-    this.pool = new Pool();
+    this.pool = pool;
   }
 
   async createInventory(id, name, description, category, quantity, location, condition, status, image_url, image_public_id, qr_url, qr_public_id, asset_token) {
