@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
-import { Pool } from 'pg';
+import pool from '../../database/pool';
 
 class AttendancesRepositories {
   constructor() {
-    this.pool = new Pool();
+    this.pool = pool();
   }
 
   async createAttendance(id, user_id, event_id, clock_in) {

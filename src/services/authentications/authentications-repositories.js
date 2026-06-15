@@ -1,9 +1,9 @@
-import { Pool } from 'pg';
+import pool from '../../database/pool.js';
 import InvariantError from '../../exceptions/invariant-error.js';
 
 class AuthRepositories {
   constructor() {
-    this.pool = new Pool();
+    this.pool = pool();
   }
 
   async addRefreshToken(token) {

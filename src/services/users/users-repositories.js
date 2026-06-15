@@ -1,8 +1,8 @@
-import { Pool } from 'pg';
+import pool from '../../database/pool.js';
 
 class UsersRepositories {
   constructor() {
-    this.pool = new Pool();
+    this.pool = pool();
   }
 
   async verifyUser(npm) {

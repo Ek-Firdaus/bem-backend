@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
-import { Pool } from 'pg';
+import pool from '../../database/pool';
 
 class EventsRepositories {
   constructor() {
-    this.pool = new Pool();
+    this.pool = pool();
   }
 
   async createEvent(id, name, start_time, end_time, token, is_active) {

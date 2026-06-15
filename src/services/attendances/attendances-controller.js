@@ -3,6 +3,7 @@ import AttendancesRepositories from './attendances-repositories.js';
 import EventsRepositories from '../events/events-repositories.js';
 import response from '../../utils/response.js';
 import InvariantError from '../../exceptions/invariant-error.js';
+import ConflictError from '../../exceptions/conflict-error.js';
 import { nanoid } from 'nanoid';
 import ExcelJS from 'exceljs';
 
@@ -29,7 +30,7 @@ export const createAttendaces = async (req, res, next) => {
 
     const existAttendances = await attendancesRepositories.getAttendancesByUserIdAndEventId(event_id, user_id);
     if (existAttendances) {
-      throw new InvariantError('Kamu sudah melakukan Presensi');
+      throw new ConflictError('Kamu sudah melakukan Presensi');
     }
 
     const attendances = await attendancesRepositories.createAttendance(id, user_id, event_id, clock_in);
