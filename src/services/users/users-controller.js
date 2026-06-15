@@ -22,6 +22,7 @@ export const createUser = async (req, res, next) => {
     const id = `user-${nanoid(16)}`;
 
     const newUser = await userRepositories.createUser({ id, name, npm, password: hashedPassword, division, role });
+    console.log('DATABASE_URL:', process.env.DATABASE_URL);
 
     return response(res, 201, 'Pengguna berhasil ditambahkan', newUser);
 
