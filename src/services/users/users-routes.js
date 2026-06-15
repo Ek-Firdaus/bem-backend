@@ -9,7 +9,7 @@ const router = Router();
 router.get('/users/profile', authenticateToken, getUserById);
 router.patch('/users/profile', authenticateToken, validate(updatePasswordUserSchema), updatePasswordUser);
 
-router.post('/users', authenticateToken, validate(createUserSchema), checkRole(['super_admin']), createUser);
+router.post('/users', authenticateToken, validate(createUserSchema), checkRole(['super_admin']),  createUser);
 router.get('/users', authenticateToken, checkRole(['super_admin']), getAllUser);
 router.put('/users/:id', authenticateToken, validate(updateUserSchema), checkRole(['super_admin', 'admin_psdm']), updateUser);
 // router.delete('/users/:id', authenticateToken)
