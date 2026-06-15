@@ -8,3 +8,5 @@ const pool = new Pool({
 });
 
 export default pool;
+
+// export const database(){}
