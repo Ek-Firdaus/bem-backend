@@ -3,7 +3,7 @@ import pool from '../../database/pool.js';
 
 class AttendancesRepositories {
   constructor() {
-    this.pool = pool();
+    this.pool = pool;
   }
 
   async createAttendance(id, user_id, event_id, clock_in) {

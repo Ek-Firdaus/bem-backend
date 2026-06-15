@@ -3,7 +3,7 @@ import InvariantError from '../../exceptions/invariant-error.js';
 
 class AuthRepositories {
   constructor() {
-    this.pool = pool();
+    this.pool = pool;
   }
 
   async addRefreshToken(token) {

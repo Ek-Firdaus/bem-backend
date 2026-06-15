@@ -3,7 +3,7 @@ import pool from '../../database/pool.js';
 
 class EventsRepositories {
   constructor() {
-    this.pool = pool();
+    this.pool = pool;
   }
 
   async createEvent(id, name, start_time, end_time, token, is_active) {

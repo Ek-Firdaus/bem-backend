@@ -2,7 +2,7 @@ import pool from '../../database/pool.js';
 
 class UsersRepositories {
   constructor() {
-    this.pool = pool();
+    this.pool = pool;
   }
 
   async verifyUser(npm) {
