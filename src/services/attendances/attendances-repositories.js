@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import pool from '../../database/pool';
+import pool from '../../database/pool.js';
 
 class AttendancesRepositories {
   constructor() {
