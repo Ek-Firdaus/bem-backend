@@ -21,6 +21,22 @@ export const upload = multer({
   },
 });
 
+export const uploadEvidence = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+    files: 5,
+  },
+  fileFilter: (req, file, cb) => {
+    const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
+    if (allowed.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Format file tidak didukung. Gunakan JPG, PNG, WEBP, atau PDF'));
+    }
+  },
+});
+
 export const uploadToCloudinary = (buffer, folder) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(

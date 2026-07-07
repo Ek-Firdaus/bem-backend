@@ -14,9 +14,9 @@ export const createUserSchema = Joi.object({
   division: Joi.string().required().messages({
     'any.required': 'Divisi harus diisi'
   }),
-  role: Joi.string().valid('super_admin', 'pilar', 'admin_sekre', 'admin_psdm', 'member').required().messages({
+  role: Joi.string().valid('super_admin', 'pilar', 'admin_sekre', 'admin_psdm', 'admin_komdigi', 'admin_advokes', 'member').required().messages({
     'any.required': 'Role harus diisi',
-    'any.only': 'Role harus bernilai salah satu dari super_admin, pilar, admin_sekre, admin_psdm, member'
+    'any.only': 'Role harus bernilai salah satu dari super_admin, pilar, admin_sekre, admin_psdm, admin_komdigi, admin_advokes, member'
   }),
 });
 
@@ -50,11 +50,13 @@ export const updateUserSchema = Joi.object({
       'pilar',
       'admin_sekre',
       'admin_psdm',
+      'admin_komdigi',
+      'admin_advokes',
       'member'
     )
     .messages({
       'any.only':
-        'Role harus bernilai salah satu dari super_admin, pilar, admin_sekre, admin_psdm, member',
+        'Role harus bernilai salah satu dari super_admin, pilar, admin_sekre, admin_psdm, admin_komdigi, admin_advokes, member',
     }),
 
   password: Joi.string().min(8).messages({

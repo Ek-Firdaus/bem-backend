@@ -12,7 +12,7 @@ export const createEvent = async (req, res, next) => {
     const { name, start_time, end_time, is_active } = req.validated;
 
     const id = `event-${nanoid(16)}`;
-    const token = Math.floor(100000 + Math.random() * 900000).toString();
+    const token = Math.floor(1000 + Math.random() * 9000).toString();
 
     const event = await eventsRepositories.createEvent(id, name, start_time, end_time, token, is_active);
 
@@ -41,7 +41,7 @@ export const updateEvent = async (req, res, next) => {
       throw new NotFoundError('Acara tidak ditemukan');
     }
 
-    const token = Math.floor(100000 + Math.random() * 900000).toString();
+    const token = Math.floor(1000 + Math.random() * 9000).toString();
 
     const updatedData = {
       name: req.validated.name ?? existingEvent.name,
