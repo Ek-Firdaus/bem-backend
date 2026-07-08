@@ -6,8 +6,10 @@ import cors from 'cors';
 
 const app = express();
 
+const AllowedOrigins = [process.env.CLIENT_URL, process.env.CLIENT_URL_2];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: AllowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
