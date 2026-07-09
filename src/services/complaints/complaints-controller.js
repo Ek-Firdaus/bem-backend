@@ -2,8 +2,8 @@
 import ComplaintRepositories from './complaints-repositories.js';
 import response from '../../utils/response.js';
 import NotFoundError from '../../exceptions/not-found-error.js';
-import { nanoid } from 'nanoid';
 import { uploadToCloudinary } from '../../utils/cloudinary.js';
+import { generateRandomNumber } from '../../utils/numberGenerator.js';
 
 const complaintRepositories = new ComplaintRepositories();
 
@@ -11,7 +11,7 @@ export const createComplaint = async (req, res, next) => {
   try {
     const { is_anonymous, full_name, npm, prodi, category, title, description, suggestion, willing_to_contact, whatsapp_number, agreement } = req.body;
 
-    const id = `complaint-${nanoid(16)}`;
+    const id = `COMP-${generateRandomNumber(6)}`;
 
     const evidences = [];
     if (req.files && req.files.length > 0) {

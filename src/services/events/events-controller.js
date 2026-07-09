@@ -4,6 +4,7 @@ import InvariantError from '../../exceptions/invariant-error.js';
 import NotFoundError from '../../exceptions/not-found-error.js';
 import response from '../../utils/response.js';
 import { nanoid } from 'nanoid';
+import { generateRandomNumber } from '../../utils/numberGenerator.js';
 
 const eventsRepositories = new EventsRepositories();
 
@@ -12,7 +13,7 @@ export const createEvent = async (req, res, next) => {
     const { name, start_time, end_time, is_active } = req.validated;
 
     const id = `event-${nanoid(16)}`;
-    const token = Math.floor(1000 + Math.random() * 9000).toString();
+    const token = generateRandomNumber(4).toString();
 
     const event = await eventsRepositories.createEvent(id, name, start_time, end_time, token, is_active);
 
@@ -41,7 +42,7 @@ export const updateEvent = async (req, res, next) => {
       throw new NotFoundError('Acara tidak ditemukan');
     }
 
-    const token = Math.floor(1000 + Math.random() * 9000).toString();
+    const token = generateRandomNumber(4).toString();
 
     const updatedData = {
       name: req.validated.name ?? existingEvent.name,
