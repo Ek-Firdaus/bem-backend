@@ -13,16 +13,18 @@ export const createComplaint = async (req, res, next) => {
 
     const id = `COMP-${generateRandomNumber(6)}`;
 
-    const evidences = [];
+    let evidences = [];
     if (req.files && req.files.length > 0) {
-      for (const file of req.files) {
-        const uploaded = await uploadToCloudinary(file.buffer, 'complaints');
-        evidences.push({
-          url: uploaded.secure_url,
-          public_id: uploaded.public_id,
-          file_type: file.mimetype
-        });
-      }
+      evidences = await Promise.all(
+        req.files.map(async (file) => {
+          const uploaded = await uploadToCloudinary(file.buffer, 'complaints');
+          return {
+            url: uploaded.secure_url,
+            public_id: uploaded.public_id,
+            file_type: file.mimetype,
+          };
+        })
+      );
     }
 
     const complaint = await complaintRepositories.createComplaint(

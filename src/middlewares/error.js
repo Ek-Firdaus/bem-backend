@@ -11,6 +11,10 @@ const ErrorHandler = (err, req, res, next) => {
     return response(res, 400, err.details[0].message, null);
   }
 
+  if (err.name === 'MulterError') {
+    return response(res, 400, `Upload gagal: ${err.message}`, null);
+  }
+
   const status = err.statusCode || err.status || 500;
   const message = err.message || 'Internal Server Error';
 

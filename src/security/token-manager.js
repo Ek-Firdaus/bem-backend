@@ -2,8 +2,11 @@ import jwt from 'jsonwebtoken';
 import InvariantError from '../exceptions/invariant-error.js';
 
 const TokenManager = {
-  generateAccessToken: (payload) => jwt.sign(payload, process.env.ACCESS_TOKEN_KEY),
-  generateRefreshToken: (payload) => jwt.sign(payload, process.env.REFRESH_TOKEN_KEY),
+  // options opsional (mis. { expiresIn: '15m' }). Tanpa options, perilakunya sama seperti sebelumnya.
+  generateAccessToken: (payload, options = {}) =>
+    jwt.sign(payload, process.env.ACCESS_TOKEN_KEY, options),
+  generateRefreshToken: (payload, options = {}) =>
+    jwt.sign(payload, process.env.REFRESH_TOKEN_KEY, options),
   verifyRefreshToken: (refreshToken) => {
     try {
       const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY);

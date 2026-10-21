@@ -1,0 +1,65 @@
+/* eslint-disable camelcase */
+/**
+ * @type {import('node-pg-migrate').ColumnDefinitions | undefined}
+ */
+export const shorthands = undefined;
+
+/**
+ * @param pgm {import('node-pg-migrate').MigrationBuilder}
+ * @param run {() => void | undefined}
+ * @returns {Promise<void> | void}
+ */
+export const up = (pgm) => {
+    pgm.createTable('external_users', {
+        id: { type: 'varchar(50)', primaryKey: true },
+        google_id: { type: 'varchar(100)', notNull: true, unique: true },
+        email: { type: 'varchar(255)', notNull: true, unique: true },
+        name: { type: 'varchar(255)', notNull: true },
+        avatar_url: { type: 'text' },
+        created_at: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') },
+        updated_at: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') },
+    });
+
+    // pgm.addColumn('orders', {
+    //   external_user_id: {
+    //     type: 'VARCHAR(50)',
+    //     notNull: true,
+    //     references: 'external_users(id)',
+    //     onDelete: 'RESTRICT',
+    //   },
+    // });
+
+    // pgm.createIndex('orders', 'external_user_id');
+    // pgm.alterColumn('orders', 'status', { type: 'VARCHAR(50)' });
+    // pgm.dropConstraint('orders', 'orders_status_check');
+
+    // pgm.sql("UPDATE orders SET status = 'verifikasi_pembayaran' WHERE status = 'verifikasi pembayaran'");
+
+    // pgm.addConstraint('orders', 'orders_status_check', {
+    //   check:
+    //     "status IN ('verifikasi_pembayaran','produksi','pengantaran','siap_diambil','selesai','ditolak','dibatalkan','pending')",
+    // });
+};
+
+/**
+ * @param pgm {import('node-pg-migrate').MigrationBuilder}
+ * @param run {() => void | undefined}
+ * @returns {Promise<void> | void}
+ */
+export const down = (pgm) => {
+    // pgm.dropIndex('orders', 'external_user_id');
+    // pgm.dropColumn('orders', 'external_user_id');
+    pgm.dropTable('external_users');
+
+    // pgm.dropConstraint('orders', 'orders_status_check');
+
+    // pgm.sql("UPDATE orders SET status = 'verifikasi pembayaran' WHERE status = 'verifikasi_pembayaran'");
+
+    // pgm.addConstraint('orders', 'orders_status_check', {
+    //   check:
+    //     "status IN ('verifikasi pembayaran','produksi','pengantaran','siap_diambil','selesai','ditolak','dibatalkan','pending')",
+    // });
+
+    // pgm.alterColumn('orders', 'status', { type: 'VARCHAR(20)' });
+
+};

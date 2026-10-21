@@ -21,4 +21,22 @@ export const validateQuery = (schema) => (req, res, next) => {
   next();
 };
 
+// middlewares/parse-json-fields.js
+import response from '../utils/response.js';
+
+export const parseJsonFields = (fields) => (req, res, next) => {
+  for (const field of fields) {
+    const raw = req.body?.[field];
+
+    if (typeof raw === 'string') {
+      try {
+        req.body[field] = JSON.parse(raw);
+      } catch {
+        return response(res, 400, `"${field}" harus berupa JSON valid`, null);
+      }
+    }
+  }
+  next();
+};
+
 // export default validate;
