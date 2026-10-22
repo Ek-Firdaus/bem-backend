@@ -13,7 +13,7 @@ router.put('/batches/:id', authenticateAny, checkRole(['super_admin']), uploadOr
 router.delete('/batches/:id', authenticateToken, checkRole(['super_admin']), deleteBatch);
 // router.get('/batches/:id', authenticateToken, checkRole(['super_admin']), getBatchById);
 
-router.get('/batches/:id', authenticateAny, getBatchById);
-router.get('/batches', authenticateAny, getAllBatches);
+router.get('/batches/:id', getBatchById);
+router.get('/batches', getAllBatches);
 
 export default router;
